@@ -1,0 +1,918 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1322" media="(prefers-color-scheme: dark)">
+<meta name="description" content="سياسة الخصوصية لتطبيق «قطعة»: ما نجمعه من بياناتك، ولماذا، ومع من نشاركه، وكم نحتفظ به، وكيف تحذف حسابك.">
+<title>سياسة الخصوصية · قطعة</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<!--
+  سياسة الخصوصية لتطبيق «قطعة» (قرار المالك 2026-10-28). المصدر هنا، والنشر
+  إلى GitHub Pages بـ scripts/publish_privacy_policy.sh (يضيف الخطوط والشعار).
+  اللغات الثلاث في صفحة واحدة: ?lang=ar|ckb|en يختار اللغة (يمرّره التطبيق
+  بلغته)، وإلا فلغة المتصفح، وبلا JavaScript تظهر الثلاث متتالية.
+  #delete-account يفتح قسم حذف الحساب بلغة القارئ (رابط Google Play).
+-->
+<script>
+(function () {
+  var langs = ["ar", "ckb", "en"];
+  var titles = {
+    ar: "سياسة الخصوصية · قطعة",
+    ckb: "سیاسەتی تایبەتمەندی · قطعة",
+    en: "Privacy Policy · Qet’a"
+  };
+  function pick() {
+    var q = null;
+    try { q = new URLSearchParams(location.search).get("lang"); } catch (e) {}
+    if (langs.indexOf(q) >= 0) return q;
+    var h = location.hash.replace("#", "").split("-")[0];
+    if (langs.indexOf(h) >= 0) return h;
+    var list = navigator.languages || [navigator.language || ""];
+    for (var i = 0; i < list.length; i++) {
+      var c = String(list[i]).toLowerCase();
+      if (c.indexOf("ckb") === 0 || c.indexOf("ku") === 0) return "ckb";
+      if (c.indexOf("ar") === 0) return "ar";
+      if (c.indexOf("en") === 0) return "en";
+    }
+    return "ar";
+  }
+  window.qitaaSetLang = function (lang) {
+    var root = document.documentElement;
+    root.setAttribute("data-lang", lang);
+    root.lang = lang;
+    root.dir = lang === "en" ? "ltr" : "rtl";
+    document.title = titles[lang];
+  };
+  window.qitaaSetLang(pick());
+})();
+</script>
+<style>
+/* خط العلامة للغات الثلاث: IBM Plex Sans Arabic، بنسخة التطبيق «Qitaa Sans». */
+@font-face { font-family: "Qitaa Sans"; src: url("fonts/QitaaSans-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Qitaa Sans"; src: url("fonts/QitaaSans-SemiBold.ttf") format("truetype"); font-weight: 600; font-display: swap; }
+
+/* ألوان التطبيق نفسها: نهاري، و«ليل بابل» حين يكون الهاتف على الداكن. */
+:root {
+  color-scheme: light dark;
+  --bg: #FFFFFF;
+  --surface: #FFFFFF;
+  --ink: #222222;
+  --muted: #5E5E5E;
+  --line: #DDDDDD;
+  --outline: #888888;
+  --brand-text: #1D3CA4;
+  --brand-soft: #EDF0F9;
+  --whatsapp: #15803D;
+  --float-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.08);
+  --float-border: transparent;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0E1322;
+    --surface: #151B2C;
+    --ink: #F2F2F2;
+    --muted: #B3B9C8;
+    --line: #2B3450;
+    --outline: #888888;
+    --brand-text: #A9BCF2;
+    --brand-soft: #1B2856;
+    --float-shadow: none;
+    --float-border: #717A96;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 16px/1.7 "Qitaa Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* بلا JavaScript تظهر اللغات الثلاث؛ معه تظهر لغة القارئ وحدها. */
+html[data-lang="ar"] article:not(#ar),
+html[data-lang="ckb"] article:not(#ckb),
+html[data-lang="en"] article:not(#en) { display: none; }
+
+.wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.top .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+}
+/* الشعار على مربّع أبيض، كأيقونة التطبيق، في الوضعين. */
+.tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 56px;
+  height: 40px;
+  border-radius: 12px;
+  background: #FFFFFF;
+  border: 1px solid var(--line);
+}
+.tile img { display: block; width: 44px; height: auto; }
+
+.langs { display: flex; gap: 4px; }
+.langs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 14px;
+  text-decoration: none;
+}
+.langs a[aria-current="true"] { background: var(--brand-soft); color: var(--brand-text); font-weight: 600; }
+
+h1 { font-size: 28px; line-height: 1.3; font-weight: 600; margin: 32px 0 4px; }
+h2 { font-size: 20px; line-height: 1.4; font-weight: 600; margin: 0 0 12px; }
+h3 { font-size: 16px; line-height: 1.5; font-weight: 600; margin: 20px 0 4px; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0; padding-inline-start: 20px; }
+li { margin: 4px 0; }
+/* الخط تحت النقاط العربية لا عبرها. */
+a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.45em; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 4px; }
+
+.meta { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+.lead { margin: 0 0 24px; }
+.num { unicode-bidi: isolate; direction: ltr; white-space: nowrap; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--float-border);
+  box-shadow: var(--float-shadow);
+  border-radius: 16px;
+  padding: 20px;
+  margin: 0 0 16px;
+}
+.card h2 { font-size: 18px; margin-bottom: 8px; }
+.card ul { margin-bottom: 0; }
+
+.jump {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 20px;
+  margin: 0 0 16px;
+  border: 1px solid var(--outline);
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+details.toc { border-top: 1px solid var(--line); }
+details.toc summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+details.toc summary::-webkit-details-marker { display: none; }
+/* سهم إلى الأسفل (وإلى الأعلى مفتوحًا)، فلا ينعكس مع اتجاه اللغة. */
+details.toc summary::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-inline-end: 4px;
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  transform: translateY(-2px) rotate(45deg);
+}
+details.toc[open] summary::after { transform: translateY(2px) rotate(-135deg); }
+details.toc ol { margin: 0 0 16px; padding-inline-start: 24px; }
+details.toc li { margin: 0; }
+details.toc li a { display: block; padding: 10px 0; text-decoration: none; }
+
+section { border-top: 1px solid var(--line); padding: 24px 0; scroll-margin-top: 72px; }
+
+.whatsapp {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 24px;
+  margin: 8px 0;
+  border-radius: 999px;
+  background: var(--whatsapp);
+  color: #FFFFFF;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.note { color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding: 24px 0 0; margin: 0; }
+footer { color: var(--muted); font-size: 14px; padding: 16px 0 40px; }
+
+@media print {
+  .top { position: static; }
+  .langs, details.toc, .jump { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="tile"><img src="logo.png" alt="قطعة" width="44" height="20"></span>
+    <nav class="langs" aria-label="اللغة · زمان · Language">
+      <a href="?lang=ar" data-lang-link="ar" lang="ar" dir="rtl">العربية</a>
+      <a href="?lang=ckb" data-lang-link="ckb" lang="ckb" dir="rtl">کوردی</a>
+      <a href="?lang=en" data-lang-link="en" lang="en" dir="ltr">English</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ============================== العربية ============================== -->
+<article id="ar" lang="ar" dir="rtl">
+  <h1>سياسة الخصوصية</h1>
+  <p class="meta">تطبيق «قطعة» · آخر تحديث: 29 تشرين الأول 2026</p>
+  <p class="lead">«قطعة» تطبيق يبيع خرائط سكنية معتمدة، مع جولة 3D مجانية لكل خارطة، وفيه متجر لمواد البناء ودليل لمراحل البناء. تشرح هذه الصفحة ما نجمعه من بياناتك ولماذا، ومع من نشاركه، وكم نحتفظ به، وما حقوقك.</p>
+
+  <div class="card">
+    <h2>باختصار</h2>
+    <ul>
+      <li>نطلب رقم هاتفك واسمك ومكان سكنك لإنشاء حسابك، ولا نصل إلى موقعك ولا جهات اتصالك ولا صورك.</li>
+      <li>لا نبيع بياناتك، ولا إعلانات في التطبيق ولا تتبّع إعلاني.</li>
+      <li>الدفع يتم خارج التطبيق عبر واتساب، فلا نجمع بيانات بطاقات مصرفية.</li>
+      <li>تحذف حسابك بنفسك من «حسابي» متى شئت.</li>
+    </ul>
+  </div>
+  <a class="jump" href="#ar-delete">كيف أحذف حسابي؟</a>
+
+  <details class="toc">
+    <summary>المحتويات</summary>
+    <ol>
+      <li><a href="#ar-collect">البيانات التي نجمعها</a></li>
+      <li><a href="#ar-not">ما لا نجمعه</a></li>
+      <li><a href="#ar-use">كيف نستعمل بياناتك</a></li>
+      <li><a href="#ar-share">مع من نشارك بياناتك</a></li>
+      <li><a href="#ar-where">أين تُحفظ بياناتك</a></li>
+      <li><a href="#ar-keep">كم نحتفظ ببياناتك</a></li>
+      <li><a href="#ar-delete">حذف الحساب</a></li>
+      <li><a href="#ar-rights">حقوقك</a></li>
+      <li><a href="#ar-security">حماية بياناتك</a></li>
+      <li><a href="#ar-children">الأطفال</a></li>
+      <li><a href="#ar-permissions">أذونات التطبيق</a></li>
+      <li><a href="#ar-changes">تغييرات هذه السياسة</a></li>
+      <li><a href="#ar-contact">تواصل معنا</a></li>
+    </ol>
+  </details>
+
+  <section id="ar-collect">
+    <h2>1. البيانات التي نجمعها</h2>
+    <h3>الحساب وتسجيل الدخول</h3>
+    <ul>
+      <li>رقم هاتفك، وهو حسابك نفسه. نرسل إليه رمز الدخول برسالة واتساب.</li>
+      <li>اسمك.</li>
+      <li>مكان سكنك: المحافظة والمدينة.</li>
+    </ul>
+    <h3>شراء باقة</h3>
+    <ul>
+      <li>الخارطة التي اشتريتها، وطريقة الدفع، والمبلغ، وتاريخ تفعيل الباقة.</li>
+      <li>يتم الدفع خارج التطبيق، بسوبر كي أو حوالة عبر واتساب، فلا نرى رقم بطاقتك ولا نحفظه. ويصلنا إيصال الدفع الذي ترسله في محادثة واتساب.</li>
+    </ul>
+    <h3>طلبات البورصة والمتجر</h3>
+    <ul>
+      <li>المواد وكمياتها وأسعارها، ومدينة التوصيل، وملاحظاتك، واسمك ورقمك، ورقم الطلب وحالته.</li>
+    </ul>
+    <h3>طلب عرض سعر للبناء</h3>
+    <ul>
+      <li>موقع الأرض ومساحتها، وعدد الطوابق، ونوع العقد، ومستوى التشطيب، ورقم هاتفك.</li>
+    </ul>
+    <h3>رحلة البناء</h3>
+    <ul>
+      <li>المراحل التي بدأتها وتقدّمك فيها، ومستوى البناء الذي اخترته، والمواد وكمياتها، والمهام التي أنجزتها وملاحظاتك عليها.</li>
+    </ul>
+    <h3>التواصل مع الدعم</h3>
+    <ul>
+      <li>تصلنا رسالتك عبر واتساب. وقد يسجّل التطبيق معها موضوع طلبك، والشاشة التي جئت منها وتفاصيلها، وملاحظتك، ورقم هاتفك، ولغة التطبيق، مع رمز مرجعي يربط السجل بالمحادثة.</li>
+    </ul>
+    <h3>بيانات تقنية وأمنية</h3>
+    <ul>
+      <li>سجل محاولات الدخول: رقم الهاتف، وعنوان IP، ووقت المحاولة ونتيجتها. نستعمله لحماية الحسابات من التخمين وإساءة الاستعمال.</li>
+      <li>رمز الدخول المؤقت: نحفظه مشفّرًا فقط، وينتهي بعد 10 دقائق.</li>
+      <li>تقارير الأعطال: إذا تعطّل التطبيق يصلنا تقرير فيه نوع الجهاز ونظامه، وإصدار التطبيق، وتفاصيل الخطأ والشاشات التي سبقته، ومعرّف داخلي لحسابك (سلسلة عشوائية). لا يحمل التقرير اسمك ولا رقمك ولا عنوان IP.</li>
+      <li>سجلات الخوادم: يسجّل مزوّد الاستضافة الطلبات التي تصل إلى خوادمنا، ومعها عنوان IP ووقت الطلب، لمدة قصيرة، لأغراض التشغيل والأمان.</li>
+    </ul>
+    <h3>على هاتفك</h3>
+    <ul>
+      <li>يحفظ التطبيق على هاتفك جلسة دخولك في التخزين الآمن للجهاز، وإعداداتك مثل اللغة والمظهر، ونسخة مؤقتة من المحتوى ليعمل مع ضعف الاتصال. هذه تبقى على هاتفك، وتُحذف الجلسة عند تسجيل الخروج أو حذف الحساب.</li>
+    </ul>
+  </section>
+
+  <section id="ar-not">
+    <h2>2. ما لا نجمعه</h2>
+    <p>لا نصل إلى موقعك الجغرافي، ولا جهات اتصالك، ولا الكاميرا أو الميكروفون، ولا نقرأ صورك. ولا نستعمل معرّفات الإعلانات ولا أدوات تتبّع إعلاني، ولا نعرض إعلانات.</p>
+  </section>
+
+  <section id="ar-use">
+    <h2>3. كيف نستعمل بياناتك</h2>
+    <ul>
+      <li>لإنشاء حسابك وتسجيل دخولك وحمايته.</li>
+      <li>لتفعيل الباقات التي تشتريها وإتاحة خرائطها لك.</li>
+      <li>لتنفيذ طلبات المتجر وترتيب توصيلها، والتواصل معك بشأنها.</li>
+      <li>للرد على طلبات عروض الأسعار والدعم.</li>
+      <li>لحفظ تقدّمك في رحلة البناء.</li>
+      <li>لعرض ما يناسب مدينتك، مثل التوصيل.</li>
+      <li>لإصلاح الأعطال وتحسين أداء التطبيق.</li>
+      <li>لمنع الاحتيال وإساءة الاستعمال.</li>
+      <li>للوفاء بالالتزامات المحاسبية والقانونية.</li>
+    </ul>
+    <p>لا نبيع بياناتك، ولا نستعملها للإعلان.</p>
+  </section>
+
+  <section id="ar-share">
+    <h2>4. مع من نشارك بياناتك</h2>
+    <p>نستعين بمزوّدي خدمة يعالجون البيانات نيابةً عنّا، وبالقدر اللازم لعملهم فقط:</p>
+    <ul>
+      <li><b>Supabase</b>: استضافة قاعدة البيانات والخوادم، في فرانكفورت بألمانيا.</li>
+      <li><b>Gupshup</b>: إرسال رمز الدخول برسالة واتساب، فيصله رقم هاتفك والرمز.</li>
+      <li><b>WhatsApp</b> (شركة Meta): المحادثات التي تبدؤها معنا، للدعم أو الدفع أو الطلبات، تتم عبر واتساب وتخضع لسياسة خصوصيته.</li>
+      <li><b>Sentry</b>: استقبال تقارير الأعطال، في ألمانيا.</li>
+      <li>مزوّد استضافة الجولات 3D: عند فتح جولة يتصل هاتفك بخوادمه مباشرة، فيصله عنوان IP ومعلومات المتصفح كما يحدث مع أي موقع.</li>
+    </ul>
+    <p>وقد نشارك بياناتك أيضًا:</p>
+    <ul>
+      <li>مع جهة التوصيل: اسمك ورقمك ومدينتك، بالقدر اللازم لإيصال طلبك.</li>
+      <li>مع الجهات الرسمية: إذا ألزمنا القانون بذلك، أو لحماية حقوقنا وسلامة المستخدمين.</li>
+      <li>إذا انتقلت ملكية التطبيق: تنتقل البيانات مع الخدمة، وتبقى هذه السياسة سارية عليها.</li>
+    </ul>
+  </section>
+
+  <section id="ar-where">
+    <h2>5. أين تُحفظ بياناتك</h2>
+    <p>تُحفظ بياناتك على خوادم Supabase في ألمانيا، وتقارير الأعطال لدى Sentry في ألمانيا أيضًا، وتخضع هناك لقواعد حماية البيانات في الاتحاد الأوروبي. ويمرّ رقمك ورمز الدخول عبر Gupshup وواتساب لإيصال رسالة الرمز. أي أن بياناتك تُنقل إلى خارج العراق وتُعالج هناك.</p>
+  </section>
+
+  <section id="ar-keep">
+    <h2>6. كم نحتفظ ببياناتك</h2>
+    <ul>
+      <li>الحساب ورحلة البناء: ما دام حسابك قائمًا.</li>
+      <li>سجلات الباقات وطلبات المتجر: ما دامت لازمة للمحاسبة وحل النزاعات والالتزامات القانونية، ويشمل ذلك ما بعد حذف الحساب.</li>
+      <li>طلبات عروض الأسعار والدعم: ما دامت لازمة لمتابعتها وحفظ سجل الخدمة.</li>
+      <li>سجل محاولات الدخول: 90 يومًا، ثم يُحذف تلقائيًا.</li>
+      <li>رمز الدخول المؤقت: يُحذف بعد انتهائه.</li>
+      <li>تقارير الأعطال: تُحذف تلقائيًا خلال 90 يومًا.</li>
+      <li>سجلات الخوادم: أيام قليلة.</li>
+    </ul>
+  </section>
+
+  <section id="ar-delete">
+    <span id="delete-account"></span>
+    <h2>7. حذف الحساب</h2>
+    <h3>من التطبيق</h3>
+    <p>افتح «حسابي»، ثم «حذف الحساب»، ثم «متابعة»، ثم «احذف حسابي». يُحذف الحساب فورًا ويخرج التطبيق منه.</p>
+    <h3>دون التطبيق</h3>
+    <p>راسلنا على واتساب <a class="num" href="https://wa.me/9647737565367" dir="ltr">+964 773 756 5367</a> من رقمك المسجّل، واكتب «حذف الحساب». نحذفه خلال 30 يومًا بعد التأكد أن الطلب منك.</p>
+    <h3>ما يُحذف</h3>
+    <ul>
+      <li>حسابك، فلا يمكن الدخول به بعد ذلك.</li>
+      <li>تقدّمك في رحلة البناء.</li>
+      <li>باقاتك من الحساب. إذا عدت بالرقم نفسه يبدأ حساب جديد فارغ.</li>
+    </ul>
+    <h3>ما يبقى</h3>
+    <ul>
+      <li>سجلات الباقات التي اشتريتها وطلبات المتجر، ومعها بيانات حسابك (الاسم والرقم ومكان السكن)، ما دامت لازمة للمحاسبة وحل النزاعات والالتزامات القانونية.</li>
+      <li>طلبات عروض الأسعار والدعم التي أرسلتها، بمحتواها، دون ربطها بحساب.</li>
+      <li>سجل محاولات الدخول حتى تنتهي مدته (90 يومًا).</li>
+      <li>تقارير الأعطال حتى تنتهي مدتها (90 يومًا).</li>
+      <li>محادثاتك معنا على واتساب، فهي في واتساب لا في التطبيق.</li>
+    </ul>
+    <p>إذا كان لديك طلب من المتجر لم يكتمل، فلا يُحذف الحساب حتى يكتمل الطلب أو يُلغى.</p>
+  </section>
+
+  <section id="ar-rights">
+    <h2>8. حقوقك</h2>
+    <ul>
+      <li>الاطلاع: ترى بيانات حسابك وباقاتك وطلباتك في «حسابي».</li>
+      <li>التصحيح: تغيّر مكان سكنك من «حسابي»، ولتصحيح اسمك راسلنا.</li>
+      <li>نسخة من بياناتك: اطلبها منا على واتساب.</li>
+      <li>الحذف: كما في «حذف الحساب» أعلاه.</li>
+      <li>الاعتراض: راسلنا إذا اعترضت على استعمال ما لبياناتك.</li>
+    </ul>
+    <p>نرد على طلبك خلال 30 يومًا.</p>
+  </section>
+
+  <section id="ar-security">
+    <h2>9. حماية بياناتك</h2>
+    <ul>
+      <li>الاتصال بين التطبيق وخوادمنا مشفّر (HTTPS).</li>
+      <li>قواعد وصول في قاعدة البيانات تجعل كل مستخدم لا يصل إلا إلى بياناته.</li>
+      <li>رمز الدخول محفوظ مشفّرًا، وينتهي بعد 10 دقائق، ومحاولات إدخاله محدودة.</li>
+      <li>جلسة دخولك محفوظة في التخزين الآمن لهاتفك.</li>
+      <li>لا يطّلع على البيانات من فريقنا إلا من يحتاجها لعمله.</li>
+    </ul>
+    <p>لا يوجد نظام آمن تمامًا، لكن إن وقع حادث يمسّ بياناتك فسنعالجه ونُعلمك به.</p>
+  </section>
+
+  <section id="ar-children">
+    <h2>10. الأطفال</h2>
+    <p>التطبيق موجّه للبالغين (18 سنة فأكثر)، ولا نجمع عن قصد بيانات من هم دون ذلك. إذا علمت أن طفلًا أنشأ حسابًا فراسلنا لنحذفه.</p>
+  </section>
+
+  <section id="ar-permissions">
+    <h2>11. أذونات التطبيق</h2>
+    <ul>
+      <li>الإنترنت: ليعمل التطبيق.</li>
+      <li>حفظ الصور، عند طلبك فقط: لحفظ صورة طلبك من المتجر في معرض صورك.</li>
+    </ul>
+  </section>
+
+  <section id="ar-changes">
+    <h2>12. تغييرات هذه السياسة</h2>
+    <p>قد نحدّث هذه السياسة. عندها نغيّر تاريخ «آخر تحديث» في أعلاها، وإذا كان التغيير جوهريًا نُعلمك به في التطبيق أو عبر واتساب.</p>
+  </section>
+
+  <section id="ar-contact">
+    <h2>13. تواصل معنا</h2>
+    <p>لأي سؤال عن خصوصيتك أو طلب يخص بياناتك، راسل «قطعة» على واتساب: <a class="num" href="https://wa.me/9647737565367" dir="ltr">+964 773 756 5367</a></p>
+    <a class="whatsapp" href="https://wa.me/9647737565367">راسلنا على واتساب</a>
+  </section>
+
+  <p class="note">هذه السياسة بالعربية والكردية والإنكليزية. عند أي اختلاف بينها يُعتمد النص العربي.</p>
+</article>
+
+<!-- ============================== کوردی ============================== -->
+<article id="ckb" lang="ckb" dir="rtl">
+  <h1>سیاسەتی تایبەتمەندی</h1>
+  <p class="meta">ئەپی «قطعة» · دوایین نوێکردنەوە: 29ی تشرینی یەکەمی 2026</p>
+  <p class="lead">«قطعة» ئەپێکە بۆ فرۆشتنی نەخشەی خانووی پەسەندکراو، هەر نەخشەیەک گەشتێکی سێ ڕەهەندیی بێبەرامبەری لەگەڵە، و فرۆشگایەکی کەرەستەی بیناسازی و ڕێبەرێکی قۆناغەکانی بیناسازیشی تێدایە. ئەم پەڕەیە ڕوونی دەکاتەوە چ زانیارییەکت کۆدەکەینەوە و بۆچی، لەگەڵ کێ هاوبەشی دەکەین، چەند دەیهێڵینەوە، و مافەکانت چین.</p>
+
+  <div class="card">
+    <h2>بە کورتی</h2>
+    <ul>
+      <li>ژمارەی مۆبایل و ناو و شوێنی نیشتەجێبوونت داوا دەکەین بۆ دروستکردنی هەژمارەکەت، و دەستمان ناگات بە شوێنەکەت و پەیوەندییەکانت و وێنەکانت.</li>
+      <li>زانیارییەکانت نافرۆشین، و هیچ ریکلام و شوێنکەوتنێکی ریکلامی لە ئەپەکەدا نییە.</li>
+      <li>پارەدان لە دەرەوەی ئەپەکە لە ڕێگەی واتسئاپەوە دەکرێت، بۆیە زانیاری کارتی بانکی کۆناکەینەوە.</li>
+      <li>هەر کاتێک بتەوێت خۆت هەژمارەکەت لە «هەژمارەکەم» دەسڕیتەوە.</li>
+    </ul>
+  </div>
+  <a class="jump" href="#ckb-delete">چۆن هەژمارەکەم بسڕمەوە؟</a>
+
+  <details class="toc">
+    <summary>ناوەڕۆک</summary>
+    <ol>
+      <li><a href="#ckb-collect">ئەو زانیاریانەی کۆیان دەکەینەوە</a></li>
+      <li><a href="#ckb-not">ئەوەی کۆی ناکەینەوە</a></li>
+      <li><a href="#ckb-use">چۆن زانیارییەکانت بەکاردەهێنین</a></li>
+      <li><a href="#ckb-share">لەگەڵ کێ هاوبەشیان دەکەین</a></li>
+      <li><a href="#ckb-where">زانیارییەکانت لە کوێ هەڵدەگیرێن</a></li>
+      <li><a href="#ckb-keep">ماوەی هەڵگرتن</a></li>
+      <li><a href="#ckb-delete">سڕینەوەی هەژمار</a></li>
+      <li><a href="#ckb-rights">مافەکانت</a></li>
+      <li><a href="#ckb-security">پاراستنی زانیارییەکانت</a></li>
+      <li><a href="#ckb-children">منداڵان</a></li>
+      <li><a href="#ckb-permissions">مۆڵەتەکانی ئەپ</a></li>
+      <li><a href="#ckb-changes">گۆڕانکاری لەم سیاسەتەدا</a></li>
+      <li><a href="#ckb-contact">پەیوەندیمان پێوە بکە</a></li>
+    </ol>
+  </details>
+
+  <section id="ckb-collect">
+    <h2>1. ئەو زانیاریانەی کۆیان دەکەینەوە</h2>
+    <h3>هەژمار و چوونەژوورەوە</h3>
+    <ul>
+      <li>ژمارەی مۆبایلەکەت، کە خودی هەژمارەکەتە. کۆدی چوونەژوورەوەت بە نامەیەکی واتسئاپ بۆ دەنێرین.</li>
+      <li>ناوت.</li>
+      <li>شوێنی نیشتەجێبوونت: پارێزگا و شار.</li>
+    </ul>
+    <h3>کڕینی پاکێج</h3>
+    <ul>
+      <li>ئەو نەخشەیەی کڕیوتە، شێوازی پارەدان، بڕی پارە، و بەرواری چالاککردنی پاکێجەکە.</li>
+      <li>پارەدان لە دەرەوەی ئەپەکە دەکرێت، بە سوپەر کی یان حەواڵە لە ڕێگەی واتسئاپەوە، بۆیە ژمارەی کارتەکەت نابینین و هەڵی ناگرین. پسوولەی پارەدانیش کە دەینێریت لە گفتوگۆی واتسئاپدا پێمان دەگات.</li>
+    </ul>
+    <h3>داواکارییەکانی بۆرسە و فرۆشگا</h3>
+    <ul>
+      <li>کەرەستەکان و بڕ و نرخەکانیان، شاری گەیاندن، تێبینییەکانت، ناو و ژمارەکەت، و ژمارە و دۆخی داواکارییەکە.</li>
+    </ul>
+    <h3>داواکردنی نرخی بیناسازی</h3>
+    <ul>
+      <li>شوێن و ڕووبەری زەوییەکە، ژمارەی نهۆمەکان، جۆری گرێبەست، ئاستی تەواوکاری، و ژمارەی مۆبایلەکەت.</li>
+    </ul>
+    <h3>گەشتی بیناسازی</h3>
+    <ul>
+      <li>ئەو قۆناغانەی دەستت پێکردوون و پێشکەوتنت تێیاندا، ئەو ئاستەی بیناسازییەی هەڵتبژاردووە، کەرەستەکان و بڕەکانیان، و ئەو ئەرکانەی تەواوت کردوون لەگەڵ تێبینییەکانت لەسەریان.</li>
+    </ul>
+    <h3>پەیوەندیکردن بە پشتگیرییەوە</h3>
+    <ul>
+      <li>نامەکەت لە ڕێگەی واتسئاپەوە پێمان دەگات. لەوانەیە ئەپەکەش لەگەڵیدا بابەتی داواکارییەکەت، ئەو شاشەیەی لێیەوە هاتوویت و وردەکارییەکانی، تێبینییەکەت، ژمارەی مۆبایلەکەت و زمانی ئەپەکە تۆمار بکات، لەگەڵ کۆدێکی ئاماژە کە تۆمارەکە بە گفتوگۆکەوە دەبەستێتەوە.</li>
+    </ul>
+    <h3>زانیاری تەکنیکی و ئاسایش</h3>
+    <ul>
+      <li>تۆماری هەوڵەکانی چوونەژوورەوە: ژمارەی مۆبایل، ناونیشانی IP، کات و ئەنجامی هەوڵەکە. بۆ پاراستنی هەژمارەکان لە مەزەندەکردن و خراپ بەکارهێنان بەکاریدەهێنین.</li>
+      <li>کۆدی کاتیی چوونەژوورەوە: تەنها بە شفرەکراوی هەڵدەگیرێت، و دوای 10 خولەک بەسەردەچێت.</li>
+      <li>ڕاپۆرتی تێکچوون: ئەگەر ئەپەکە تێکچوو، ڕاپۆرتێکمان پێدەگات کە جۆری ئامێر و سیستەمەکەی، وەشانی ئەپ، وردەکاری هەڵەکە و ئەو شاشانەی پێشی بوون، و ناسنامەیەکی ناوخۆیی هەژمارەکەت (زنجیرەیەکی هەڕەمەکی) تێدایە. ڕاپۆرتەکە ناو و ژمارە و ناونیشانی IP ـت هەڵناگرێت.</li>
+      <li>تۆماری ڕاژەکار: دابینکەری هۆستینگ ئەو داواکارییانەی دەگەنە ڕاژەکارەکانمان، لەگەڵ ناونیشانی IP و کات، بۆ ماوەیەکی کورت تۆمار دەکات، بۆ مەبەستی کارپێکردن و ئاسایش.</li>
+    </ul>
+    <h3>لەسەر مۆبایلەکەت</h3>
+    <ul>
+      <li>ئەپەکە دانیشتنی چوونەژوورەوەت لە کۆگای پارێزراوی ئامێرەکەدا هەڵدەگرێت، لەگەڵ ڕێکخستنەکانت وەک زمان و دیمەن، و کۆپییەکی کاتیی ناوەڕۆک بۆ ئەوەی لەگەڵ هێڵی لاوازیش کار بکات. ئەمانە لەسەر مۆبایلەکەت دەمێننەوە، و دانیشتنەکە کاتی چوونەدەرەوە یان سڕینەوەی هەژمار دەسڕدرێتەوە.</li>
+    </ul>
+  </section>
+
+  <section id="ckb-not">
+    <h2>2. ئەوەی کۆی ناکەینەوە</h2>
+    <p>دەستمان ناگات بە شوێنی جوگرافیت، پەیوەندییەکانت، کامێرا یان مایکرۆفۆن، و وێنەکانت ناخوێنینەوە. ناسنامەی ریکلام و ئامرازی شوێنکەوتنی ریکلامی بەکارناهێنین، و ریکلام پیشان نادەین.</p>
+  </section>
+
+  <section id="ckb-use">
+    <h2>3. چۆن زانیارییەکانت بەکاردەهێنین</h2>
+    <ul>
+      <li>بۆ دروستکردنی هەژمارەکەت، چوونەژوورەوەت و پاراستنی.</li>
+      <li>بۆ چالاککردنی ئەو پاکێجانەی دەیانکڕیت و بەردەستخستنی نەخشەکانیان بۆت.</li>
+      <li>بۆ جێبەجێکردنی داواکارییەکانی فرۆشگا، ڕێکخستنی گەیاندنیان و پەیوەندیکردن پێتەوە دەربارەیان.</li>
+      <li>بۆ وەڵامدانەوەی داواکارییەکانی نرخ و پشتگیری.</li>
+      <li>بۆ هەڵگرتنی پێشکەوتنت لە گەشتی بیناسازیدا.</li>
+      <li>بۆ پیشاندانی ئەوەی بۆ شارەکەت گونجاوە، وەک گەیاندن.</li>
+      <li>بۆ چاککردنی تێکچوونەکان و باشترکردنی کارایی ئەپەکە.</li>
+      <li>بۆ ڕێگریکردن لە فێڵ و خراپ بەکارهێنان.</li>
+      <li>بۆ جێبەجێکردنی پابەندبوونە ژمێریاری و یاساییەکان.</li>
+    </ul>
+    <p>زانیارییەکانت نافرۆشین و بۆ ریکلام بەکاریان ناهێنین.</p>
+  </section>
+
+  <section id="ckb-share">
+    <h2>4. لەگەڵ کێ هاوبەشیان دەکەین</h2>
+    <p>پشت بە دابینکەرانی خزمەتگوزاری دەبەستین کە لە جیاتی ئێمە مامەڵە لەگەڵ زانیارییەکان دەکەن، تەنها بەو ئەندازەیەی کارەکەیان پێویستی پێیەتی:</p>
+    <ul>
+      <li><b>Supabase</b>: هۆستکردنی بنکەدراوە و ڕاژەکارەکان، لە فرانکفۆرتی ئەڵمانیا.</li>
+      <li><b>Gupshup</b>: ناردنی کۆدی چوونەژوورەوە بە نامەی واتسئاپ، بۆیە ژمارەی مۆبایلەکەت و کۆدەکەی پێدەگات.</li>
+      <li><b>WhatsApp</b> (کۆمپانیای Meta): ئەو گفتوگۆیانەی لەگەڵمان دەستی پێدەکەیت، بۆ پشتگیری یان پارەدان یان داواکاری، لە واتسئاپدا دەکرێن و سیاسەتی تایبەتمەندیی واتسئاپ دەیانگرێتەوە.</li>
+      <li><b>Sentry</b>: وەرگرتنی ڕاپۆرتی تێکچوون، لە ئەڵمانیا.</li>
+      <li>دابینکەری هۆستکردنی گەشتە سێ ڕەهەندییەکان: کاتێک گەشتێک دەکەیتەوە، مۆبایلەکەت ڕاستەوخۆ بە ڕاژەکارەکانیانەوە پەیوەست دەبێت، بۆیە ناونیشانی IP و زانیاری وێبگەڕەکەتیان پێدەگات، وەک هەر ماڵپەڕێکی تر.</li>
+    </ul>
+    <p>هەروەها لەوانەیە زانیارییەکانت هاوبەش بکەین:</p>
+    <ul>
+      <li>لەگەڵ لایەنی گەیاندن: ناو و ژمارە و شارەکەت، تەنها بەو ئەندازەیەی بۆ گەیاندنی داواکارییەکەت پێویستە.</li>
+      <li>لەگەڵ دەسەڵاتە فەرمییەکان: ئەگەر یاسا ناچارمان بکات، یان بۆ پاراستنی مافەکانمان و سەلامەتیی بەکارهێنەران.</li>
+      <li>ئەگەر خاوەندارێتیی ئەپەکە گۆڕا: زانیارییەکان لەگەڵ خزمەتگوزارییەکە دەگوازرێنەوە و ئەم سیاسەتە هەر دەیانگرێتەوە.</li>
+    </ul>
+  </section>
+
+  <section id="ckb-where">
+    <h2>5. زانیارییەکانت لە کوێ هەڵدەگیرێن</h2>
+    <p>زانیارییەکانت لەسەر ڕاژەکارەکانی Supabase لە ئەڵمانیا هەڵدەگیرێن، و ڕاپۆرتەکانی تێکچوون لای Sentry، ئەویش لە ئەڵمانیا، و لەوێ یاساکانی پاراستنی زانیاریی یەکێتیی ئەورووپا دەیانگرێتەوە. ژمارە و کۆدی چوونەژوورەوەت بە Gupshup و واتسئاپدا تێدەپەڕن بۆ گەیاندنی نامەی کۆدەکە. واتە زانیارییەکانت بۆ دەرەوەی عێراق دەگوازرێنەوە و لەوێ مامەڵەیان لەگەڵ دەکرێت.</p>
+  </section>
+
+  <section id="ckb-keep">
+    <h2>6. ماوەی هەڵگرتن</h2>
+    <ul>
+      <li>هەژمار و گەشتی بیناسازی: تا هەژمارەکەت مابێت.</li>
+      <li>تۆماری پاکێج و داواکارییەکانی فرۆشگا: تا ئەو کاتەی بۆ ژمێریاری و چارەسەرکردنی ناکۆکی و پابەندبوونە یاساییەکان پێویستن، تەنانەت دوای سڕینەوەی هەژمار.</li>
+      <li>داواکارییەکانی نرخ و پشتگیری: تا ئەو کاتەی بۆ بەدواداچوونیان و هەڵگرتنی تۆماری خزمەتگوزاری پێویستن.</li>
+      <li>تۆماری هەوڵەکانی چوونەژوورەوە: 90 ڕۆژ، پاشان خۆکارانە دەسڕدرێتەوە.</li>
+      <li>کۆدی کاتیی چوونەژوورەوە: دوای بەسەرچوونی دەسڕدرێتەوە.</li>
+      <li>ڕاپۆرتی تێکچوون: لە ماوەی 90 ڕۆژدا خۆکارانە دەسڕدرێنەوە.</li>
+      <li>تۆماری ڕاژەکار: چەند ڕۆژێک.</li>
+    </ul>
+  </section>
+
+  <section id="ckb-delete">
+    <h2>7. سڕینەوەی هەژمار</h2>
+    <h3>لە ئەپەکەوە</h3>
+    <p>«هەژمارەکەم» بکەرەوە، پاشان «سڕینەوەی هەژمار»، پاشان «بەردەوامبە»، پاشان «هەژمارەکەم بسڕەوە». هەژمارەکە یەکسەر دەسڕدرێتەوە و ئەپەکە لێی دەچێتە دەرەوە.</p>
+    <h3>بەبێ ئەپەکە</h3>
+    <p>لە ژمارە تۆمارکراوەکەتەوە لە واتسئاپ نامەمان بۆ بنێرە بۆ <a class="num" href="https://wa.me/9647737565367" dir="ltr">+964 773 756 5367</a> و بنووسە «سڕینەوەی هەژمار». دوای ئەوەی دڵنیا بووینەوە داواکارییەکە هی خۆتە، لە ماوەی 30 ڕۆژدا دەیسڕینەوە.</p>
+    <h3>چی دەسڕدرێتەوە</h3>
+    <ul>
+      <li>هەژمارەکەت، ئیتر ناتوانیت پێی بچیتە ژوورەوە.</li>
+      <li>پێشکەوتنت لە گەشتی بیناسازیدا.</li>
+      <li>پاکێجەکانت لە هەژمارەکە. ئەگەر بە هەمان ژمارە گەڕایتەوە، هەژمارێکی نوێی بەتاڵ دەست پێدەکات.</li>
+    </ul>
+    <h3>چی دەمێنێتەوە</h3>
+    <ul>
+      <li>تۆماری ئەو پاکێجانەی کڕیوتن و داواکارییەکانی فرۆشگا، لەگەڵ زانیاریی هەژمارەکەت (ناو، ژمارەی مۆبایل و شوێنی نیشتەجێبوون)، تا ئەو کاتەی بۆ ژمێریاری و چارەسەرکردنی ناکۆکی و پابەندبوونە یاساییەکان پێویستن.</li>
+      <li>ئەو داواکارییانەی نرخ و پشتگیری کە ناردووتن، بە ناوەڕۆکەکەیانەوە، بەبێ بەستنەوە بە هیچ هەژمارێکەوە.</li>
+      <li>تۆماری هەوڵەکانی چوونەژوورەوە، تا ماوەکەی تەواو دەبێت (90 ڕۆژ).</li>
+      <li>ڕاپۆرتەکانی تێکچوون، تا ماوەکەیان تەواو دەبێت (90 ڕۆژ).</li>
+      <li>گفتوگۆکانت لەگەڵمان لە واتسئاپ: ئەوانە لە واتسئاپدان، نەک لە ئەپەکەدا.</li>
+    </ul>
+    <p>ئەگەر داواکارییەکی فرۆشگات هەیە کە تەواو نەبووە، هەژمارەکە ناسڕدرێتەوە تا داواکارییەکە تەواو دەبێت یان هەڵدەوەشێتەوە.</p>
+  </section>
+
+  <section id="ckb-rights">
+    <h2>8. مافەکانت</h2>
+    <ul>
+      <li>بینین: زانیاریی هەژمار و پاکێج و داواکارییەکانت لە «هەژمارەکەم» دەبینیت.</li>
+      <li>ڕاستکردنەوە: شوێنی نیشتەجێبوونت لە «هەژمارەکەم» دەگۆڕیت، و بۆ ڕاستکردنەوەی ناوت نامەمان بۆ بنێرە.</li>
+      <li>کۆپییەک لە زانیارییەکانت: لە واتسئاپ داوای بکە.</li>
+      <li>سڕینەوە: وەک لە «سڕینەوەی هەژمار» لە سەرەوە.</li>
+      <li>ناڕەزایی: ئەگەر ناڕازیت لە بەکارهێنانێکی زانیارییەکانت، نامەمان بۆ بنێرە.</li>
+    </ul>
+    <p>لە ماوەی 30 ڕۆژدا وەڵامی داواکارییەکەت دەدەینەوە.</p>
+  </section>
+
+  <section id="ckb-security">
+    <h2>9. پاراستنی زانیارییەکانت</h2>
+    <ul>
+      <li>پەیوەندیی نێوان ئەپەکە و ڕاژەکارەکانمان شفرەکراوە (HTTPS).</li>
+      <li>یاساکانی دەستگەیشتن لە بنکەدراوەکەدا وا دەکەن هەر بەکارهێنەرێک تەنها دەستی بە زانیارییەکانی خۆی بگات.</li>
+      <li>کۆدی چوونەژوورەوە بە شفرەکراوی هەڵدەگیرێت، دوای 10 خولەک بەسەردەچێت، و هەوڵەکانی نووسینی سنووردارن.</li>
+      <li>دانیشتنی چوونەژوورەوەت لە کۆگای پارێزراوی مۆبایلەکەتدا هەڵدەگیرێت.</li>
+      <li>تەنها ئەو ئەندامانەی تیمەکەمان کە بۆ کارەکەیان پێویستیانە دەتوانن زانیارییەکان ببینن.</li>
+    </ul>
+    <p>هیچ سیستەمێک بە تەواوی پارێزراو نییە، بەڵام ئەگەر ڕووداوێک زانیارییەکانتی گرتەوە، چارەسەری دەکەین و ئاگادارت دەکەینەوە.</p>
+  </section>
+
+  <section id="ckb-children">
+    <h2>10. منداڵان</h2>
+    <p>ئەپەکە بۆ گەورەساڵانە (18 ساڵ و سەرووتر)، و بە ئەنقەست زانیاریی کەسانی تەمەن کەمتر لەوە کۆناکەینەوە. ئەگەر زانیت منداڵێک هەژماری دروستکردووە، نامەمان بۆ بنێرە بۆ ئەوەی بیسڕینەوە.</p>
+  </section>
+
+  <section id="ckb-permissions">
+    <h2>11. مۆڵەتەکانی ئەپ</h2>
+    <ul>
+      <li>ئینتەرنێت: بۆ ئەوەی ئەپەکە کار بکات.</li>
+      <li>هەڵگرتنی وێنە، تەنها کاتێک داوای دەکەیت: بۆ هەڵگرتنی وێنەی داواکاریی فرۆشگاکەت لە گەلەریی وێنەکانتدا.</li>
+    </ul>
+  </section>
+
+  <section id="ckb-changes">
+    <h2>12. گۆڕانکاری لەم سیاسەتەدا</h2>
+    <p>لەوانەیە ئەم سیاسەتە نوێ بکەینەوە. ئەو کاتە بەرواری «دوایین نوێکردنەوە» لە سەرەوە دەگۆڕین، و ئەگەر گۆڕانکارییەکە بنەڕەتی بوو، لە ئەپەکەدا یان لە واتسئاپ ئاگادارت دەکەینەوە.</p>
+  </section>
+
+  <section id="ckb-contact">
+    <h2>13. پەیوەندیمان پێوە بکە</h2>
+    <p>بۆ هەر پرسیارێک دەربارەی تایبەتمەندییەکەت یان داواکارییەک دەربارەی زانیارییەکانت، لە واتسئاپ نامە بۆ «قطعة» بنێرە: <a class="num" href="https://wa.me/9647737565367" dir="ltr">+964 773 756 5367</a></p>
+    <a class="whatsapp" href="https://wa.me/9647737565367">لە واتسئاپ نامەمان بۆ بنێرە</a>
+  </section>
+
+  <p class="note">ئەم سیاسەتە بە عەرەبی و کوردی و ئینگلیزی بەردەستە. ئەگەر جیاوازییەک لە نێوانیاندا هەبوو، دەقە عەرەبییەکە پشتی پێدەبەسترێت.</p>
+</article>
+
+<!-- ============================== English ============================== -->
+<article id="en" lang="en" dir="ltr">
+  <h1>Privacy Policy</h1>
+  <p class="meta">Qet’a app · Last updated: 29 October 2026</p>
+  <p class="lead">Qet’a (قطعة) sells certified residential house plans, each with a free 3D tour, and offers a building-materials store and a guide to the stages of building a house. This page explains what data we collect and why, who we share it with, how long we keep it, and your rights.</p>
+
+  <div class="card">
+    <h2>In short</h2>
+    <ul>
+      <li>We ask for your phone number, name and where you live to create your account. We don’t access your location, contacts or photos.</li>
+      <li>We don’t sell your data. There are no ads and no ad tracking in the app.</li>
+      <li>Payment happens outside the app, over WhatsApp, so we never collect card details.</li>
+      <li>You can delete your account yourself, at any time, from Account.</li>
+    </ul>
+  </div>
+  <a class="jump" href="#en-delete">How do I delete my account?</a>
+
+  <details class="toc">
+    <summary>Contents</summary>
+    <ol>
+      <li><a href="#en-collect">Data we collect</a></li>
+      <li><a href="#en-not">What we don’t collect</a></li>
+      <li><a href="#en-use">How we use your data</a></li>
+      <li><a href="#en-share">Who we share it with</a></li>
+      <li><a href="#en-where">Where your data is stored</a></li>
+      <li><a href="#en-keep">How long we keep it</a></li>
+      <li><a href="#en-delete">Deleting your account</a></li>
+      <li><a href="#en-rights">Your rights</a></li>
+      <li><a href="#en-security">How we protect your data</a></li>
+      <li><a href="#en-children">Children</a></li>
+      <li><a href="#en-permissions">App permissions</a></li>
+      <li><a href="#en-changes">Changes to this policy</a></li>
+      <li><a href="#en-contact">Contact us</a></li>
+    </ol>
+  </details>
+
+  <section id="en-collect">
+    <h2>1. Data we collect</h2>
+    <h3>Account and sign-in</h3>
+    <ul>
+      <li>Your phone number, which is your account. We send your sign-in code to it in a WhatsApp message.</li>
+      <li>Your name.</li>
+      <li>Where you live: governorate and city.</li>
+    </ul>
+    <h3>Buying a package</h3>
+    <ul>
+      <li>The plan you bought, the payment method, the amount and the date the package was activated.</li>
+      <li>Payment happens outside the app, by SuperKi or a transfer arranged on WhatsApp, so we never see or store your card number. The payment receipt you send reaches us in the WhatsApp chat.</li>
+    </ul>
+    <h3>Marketplace orders</h3>
+    <ul>
+      <li>The materials, their quantities and prices, the delivery city, your notes, your name and phone number, and the order number and status.</li>
+    </ul>
+    <h3>Requesting a building quote</h3>
+    <ul>
+      <li>The plot’s location and area, the number of floors, the contract type, the finishing level and your phone number.</li>
+    </ul>
+    <h3>Your build journey</h3>
+    <ul>
+      <li>The stages you started and your progress in them, the build level you chose, materials and their quantities, and the tasks you completed with your notes on them.</li>
+    </ul>
+    <h3>Contacting support</h3>
+    <ul>
+      <li>Your message reaches us on WhatsApp. The app may also record the topic, the screen you came from and its details, your note, your phone number and the app’s language, with a reference code that links the record to the chat.</li>
+    </ul>
+    <h3>Technical and security data</h3>
+    <ul>
+      <li>Sign-in attempts: phone number, IP address, time and result. We use them to protect accounts from guessing and abuse.</li>
+      <li>The one-time sign-in code: stored only in encrypted form, and it expires after 10 minutes.</li>
+      <li>Crash reports: if the app crashes, we receive a report with the device model and operating system, the app version, details of the error and the screens before it, and an internal ID for your account (a random string). Reports don’t include your name, phone number or IP address.</li>
+      <li>Server logs: our hosting provider logs the requests that reach our servers, with the IP address and time, for a short period, for operations and security.</li>
+    </ul>
+    <h3>On your phone</h3>
+    <ul>
+      <li>The app keeps your sign-in session in the device’s secure storage, your settings such as language and appearance, and a temporary copy of content so that it works on a weak connection. These stay on your phone; the session is removed when you sign out or delete your account.</li>
+    </ul>
+  </section>
+
+  <section id="en-not">
+    <h2>2. What we don’t collect</h2>
+    <p>We don’t access your location, contacts, camera or microphone, and we don’t read your photos. We don’t use advertising IDs or ad-tracking tools, and we show no ads.</p>
+  </section>
+
+  <section id="en-use">
+    <h2>3. How we use your data</h2>
+    <ul>
+      <li>To create your account, sign you in and keep it secure.</li>
+      <li>To activate the packages you buy and give you their plans.</li>
+      <li>To fulfil marketplace orders, arrange delivery and contact you about them.</li>
+      <li>To answer quote and support requests.</li>
+      <li>To save your progress in the build journey.</li>
+      <li>To show what fits your city, such as delivery.</li>
+      <li>To fix crashes and improve the app’s performance.</li>
+      <li>To prevent fraud and abuse.</li>
+      <li>To meet accounting and legal obligations.</li>
+    </ul>
+    <p>We don’t sell your data or use it for advertising.</p>
+  </section>
+
+  <section id="en-share">
+    <h2>4. Who we share it with</h2>
+    <p>We use service providers that process data on our behalf, only as far as their work needs:</p>
+    <ul>
+      <li><b>Supabase</b>: hosts our database and servers, in Frankfurt, Germany.</li>
+      <li><b>Gupshup</b>: sends your sign-in code as a WhatsApp message, so it receives your phone number and the code.</li>
+      <li><b>WhatsApp</b> (Meta): the chats you start with us, for support, payment or orders, run on WhatsApp and fall under its privacy policy.</li>
+      <li><b>Sentry</b>: receives crash reports, in Germany.</li>
+      <li>The 3D tour hosting provider: when you open a tour, your phone connects to its servers directly, so it receives your IP address and browser details, as with any website.</li>
+    </ul>
+    <p>We may also share data:</p>
+    <ul>
+      <li>With the delivery party: your name, phone number and city, only as far as delivering your order needs.</li>
+      <li>With authorities: when the law requires it, or to protect our rights and our users’ safety.</li>
+      <li>If ownership of the app changes: the data moves with the service, and this policy still applies to it.</li>
+    </ul>
+  </section>
+
+  <section id="en-where">
+    <h2>5. Where your data is stored</h2>
+    <p>Your data is stored on Supabase servers in Germany, and crash reports with Sentry, also in Germany, where the European Union’s data protection rules apply. Your phone number and sign-in code pass through Gupshup and WhatsApp to deliver the code message. This means your data is transferred outside Iraq and processed there.</p>
+  </section>
+
+  <section id="en-keep">
+    <h2>6. How long we keep it</h2>
+    <ul>
+      <li>Your account and build journey: while your account exists.</li>
+      <li>Package and marketplace order records: as long as needed for accounting, resolving disputes and legal obligations, including after your account is deleted.</li>
+      <li>Quote and support requests: as long as needed to follow them up and keep a record of the service.</li>
+      <li>Sign-in attempts: 90 days, then deleted automatically.</li>
+      <li>The one-time sign-in code: deleted after it expires.</li>
+      <li>Crash reports: deleted automatically within 90 days.</li>
+      <li>Server logs: a few days.</li>
+    </ul>
+  </section>
+
+  <section id="en-delete">
+    <h2>7. Deleting your account</h2>
+    <h3>From the app</h3>
+    <p>Open Account, then Delete account, then Continue, then Delete my account. The account is deleted at once and the app signs out.</p>
+    <h3>Without the app</h3>
+    <p>Message us on WhatsApp at <a class="num" href="https://wa.me/9647737565367">+964 773 756 5367</a> from your registered number and write “Delete account”. We delete it within 30 days, once we have confirmed the request is yours.</p>
+    <h3>What is deleted</h3>
+    <ul>
+      <li>Your account, so it can no longer be used to sign in.</li>
+      <li>Your progress in the build journey.</li>
+      <li>Your packages, from the account. If you come back with the same number, a new, empty account starts.</li>
+    </ul>
+    <h3>What is kept</h3>
+    <ul>
+      <li>Records of the packages you bought and your marketplace orders, with your account details (name, phone number and where you live), as long as needed for accounting, resolving disputes and legal obligations.</li>
+      <li>The quote and support requests you sent, with their content, no longer linked to an account.</li>
+      <li>Sign-in attempts, until their period ends (90 days).</li>
+      <li>Crash reports, until their period ends (90 days).</li>
+      <li>Your chats with us on WhatsApp: they are in WhatsApp, not in the app.</li>
+    </ul>
+    <p>If you have a marketplace order that isn’t finished, the account isn’t deleted until the order is completed or cancelled.</p>
+  </section>
+
+  <section id="en-rights">
+    <h2>8. Your rights</h2>
+    <ul>
+      <li>Access: see your account details, packages and orders in Account.</li>
+      <li>Correction: change where you live in Account; message us to correct your name.</li>
+      <li>A copy of your data: ask us on WhatsApp.</li>
+      <li>Deletion: see Deleting your account above.</li>
+      <li>Objection: message us if you object to a use of your data.</li>
+    </ul>
+    <p>We answer your request within 30 days.</p>
+  </section>
+
+  <section id="en-security">
+    <h2>9. How we protect your data</h2>
+    <ul>
+      <li>The connection between the app and our servers is encrypted (HTTPS).</li>
+      <li>Access rules in the database let each user reach only their own data.</li>
+      <li>The sign-in code is stored encrypted, expires after 10 minutes, and attempts to enter it are limited.</li>
+      <li>Your sign-in session is kept in your phone’s secure storage.</li>
+      <li>Only team members who need the data for their work can see it.</li>
+    </ul>
+    <p>No system is perfectly secure, but if an incident affects your data, we will deal with it and let you know.</p>
+  </section>
+
+  <section id="en-children">
+    <h2>10. Children</h2>
+    <p>The app is meant for adults (18 and over), and we don’t knowingly collect data from anyone younger. If you learn that a child has created an account, message us and we will delete it.</p>
+  </section>
+
+  <section id="en-permissions">
+    <h2>11. App permissions</h2>
+    <ul>
+      <li>Internet: for the app to work.</li>
+      <li>Saving photos, only when you ask: to save your marketplace order’s image to your photo gallery.</li>
+    </ul>
+  </section>
+
+  <section id="en-changes">
+    <h2>12. Changes to this policy</h2>
+    <p>We may update this policy. When we do, we change the “Last updated” date at the top, and if the change is significant, we tell you in the app or on WhatsApp.</p>
+  </section>
+
+  <section id="en-contact">
+    <h2>13. Contact us</h2>
+    <p>For any question about your privacy or a request about your data, message Qet’a on WhatsApp: <a class="num" href="https://wa.me/9647737565367">+964 773 756 5367</a></p>
+    <a class="whatsapp" href="https://wa.me/9647737565367">Message us on WhatsApp</a>
+  </section>
+
+  <p class="note">This policy is available in Arabic, Kurdish and English. If they differ, the Arabic text prevails.</p>
+</article>
+
+</main>
+
+<footer class="wrap">© 2026 قطعة · Qet’a</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function mark(lang) {
+    var links = document.querySelectorAll("[data-lang-link]");
+    for (var i = 0; i < links.length; i++) {
+      links[i].setAttribute("aria-current", links[i].getAttribute("data-lang-link") === lang ? "true" : "false");
+    }
+  }
+  mark(root.getAttribute("data-lang"));
+  document.querySelector(".langs").addEventListener("click", function (e) {
+    var link = e.target.closest("[data-lang-link]");
+    if (!link) return;
+    e.preventDefault();
+    var lang = link.getAttribute("data-lang-link");
+    window.qitaaSetLang(lang);
+    mark(lang);
+    try {
+      var url = new URL(location.href);
+      url.searchParams.set("lang", lang);
+      url.hash = "";
+      history.replaceState(null, "", url.toString());
+    } catch (err) {}
+    // The new language starts at its top at once, not scrolled through.
+    try { window.scrollTo({ top: 0, behavior: "instant" }); } catch (err) { window.scrollTo(0, 0); }
+  });
+  // The store's account-deletion link: #delete-account opens that section in
+  // the reader's language (again once the fonts have settled the layout).
+  if (location.hash === "#delete-account") {
+    var go = function () {
+      var target = document.getElementById(root.getAttribute("data-lang") + "-delete");
+      if (target) target.scrollIntoView();
+    };
+    go();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go);
+  }
+})();
+</script>
+</body>
+</html>
