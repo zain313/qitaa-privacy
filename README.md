@@ -1,6 +1,6 @@
-# Qet'a (قطعة) privacy policy and terms
+# Qotaa (قطعة) privacy policy and terms
 
-The privacy policy of the Qet'a app, in Arabic, Kurdish (Sorani) and English:
+The privacy policy of the Qotaa app, in Arabic, Kurdish (Sorani) and English:
 https://zain313.github.io/qitaa-privacy/
 
 Its terms and conditions, in the same three languages (once published):
